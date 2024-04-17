@@ -1,0 +1,60 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flora Shield</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+        crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="header">
+        <img src="/static/images/logo.png" class="logo" alt="FLORA SHIELD"><br>
+      An Automated Pest Detection And Remediation System
+    </div>
+
+    <div class="content">
+        <div class="upload">
+            <button class="btn-upload" id="btn-upload">Choose a file</button>
+            <div class="hint" id="hint">Supported formats : PNG, JPG and JPEG.</div>
+            <form action="/" method="POST" id="form" enctype="multipart/form-data">
+                <input type="file" id="input" accept="image/*" name="file" hidden>
+                <label class="hint" for="">Choose a model : </label>
+                <select name="models">
+                    <option value="VGG16" {% if models=="VGG16" %} selected {% endif %}>VGG16</option>
+                    <option value="Resnet50" {% if models=="Resnet50" %} selected {% endif %}>Resnet50</option>
+                    <option value="Inception-v3" {% if models=="Inception-v3" %} selected {% endif %}>Inception v3</option>
+                </select>
+            </form>
+        </div>
+        <div class="result">
+            {% if msg %}
+            <div class="result_title">Results identified with {{ models }}</div>
+            <div class="result_text">{{ msg }}</div>
+            <div class="result_text">
+                
+            Type of insect : 
+                <span class="result_predict">{{ predict_name }}</span>
+            </div>
+            <div class="more">{{ more }}</div>
+            {% if image %}
+            <img class="result_image" src="/static/file/{{ image }}" alt="">
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+<script>
+    $("#btn-upload").click(() => {
+      $("#input").trigger("click");
+    });
+
+    $("#input").change(() => {
+      $("#form").submit();
+      $("#hint").text("Uploading File.." + $("#input")[0].files[0].name)
+    });
+</script>
+</html>
